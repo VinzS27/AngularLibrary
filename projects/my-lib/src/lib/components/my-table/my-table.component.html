@@ -1,0 +1,68 @@
+<div class="container">
+  <div class="search-bar">
+    <input type="text" [ngModel]="searchText()" (ngModelChange)="searchText.set($event)" placeholder="Cerca"/>
+
+    <div>
+      @for (action of tableConfig()?.actions; track action.type) {
+        @if (action.type === MyTableActionEnum.NEW_ROW) {
+          <my-button [buttonConfig]="action.buttonConfig" (click)="onAction(MyTableActionEnum.NEW_ROW)">
+          </my-button>
+        }
+      }
+      <br>
+    </div>
+  </div>
+
+  <!-- Tabella -->
+  <table>
+    <thead>
+    <tr>
+      @for (header of tableConfig()?.headers; track header.key) {
+        <th (click)="sortBy(header.key)">
+          {{ header.label }}
+          @if (order()?.defaultColumn === header.key) {
+            {{ order()?.orderType === 'asc' ? '⬆️' : '⬇️' }}
+          }
+        </th>
+      }
+      <th>Azioni</th>
+    </tr>
+    </thead>
+
+    <tbody>
+      @for (row of (data()
+        | filterPipe: searchText() : (tableConfig()?.search?.columns ?? [])
+        | sortPipe: order()
+        | paginatePipe: currentPage() : itemsPerPage()); track row.id) {
+        <tr>
+          @for (header of tableConfig()?.headers; track header.key) {
+            <td>{{ row[header.key] }}</td>
+          }
+          <td>
+            @for (action of tableConfig()?.actions; track action.type) {
+              @if (action.type !== MyTableActionEnum.NEW_ROW) {
+                <my-button
+                  [buttonConfig]="action.buttonConfig" (click)="onAction(action.type!, row)">
+                </my-button>
+              }
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<!-- Paginazione -->
+<div class="pagination">
+  <button (click)="changePage(currentPage() - 1)" [disabled]="currentPage() === 1">⬅️</button>
+  <span> Pagina {{ currentPage() }} di {{ totalPages }} </span>
+  <button (click)="changePage(currentPage() + 1)" [disabled]="currentPage() === totalPages">➡️</button>
+
+  <select (change)="changeItemsPerPage($event)">
+    @for (option of tableConfig()?.pagination?.itemPerPageOptions; track option) {
+      <option [value]="option" [selected]="option === itemsPerPage()">{{ option }}</option>
+    }
+  </select>
+</div>
+

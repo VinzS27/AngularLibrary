@@ -1,0 +1,54 @@
+.btn {
+  padding: 10px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* CHECK */
+.btn-check {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-check:hover {
+  background-color: #218838;
+}
+
+/* UPDATE */
+.btn-update {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-update:hover {
+  background-color: #0056b3;
+}
+
+/* DELETE */
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-delete:hover {
+  background-color: #c82333;
+}
+
+/* NEW */
+.btn-new {
+  background-color: #fd7e14;
+  color: white;
+}
+
+.btn-new:hover {
+  background-color: #e46a0a;
+}
+
+
